@@ -1,7 +1,7 @@
 <h1 align="center"> SIKOLA </h1> <br>
 <p align="center">
   <a href="https://gitpoint.co/">
-    <img alt="GitPoint" title="GitPoint" src="https://imgur.com/lC2pvsP" width="450">
+    <img alt="GitPoint" title="GitPoint" src="https://i.ibb.co.com/4jMkWPz/Logo-Sikola-1.png" width="450">
   </a>
 </p>
 
