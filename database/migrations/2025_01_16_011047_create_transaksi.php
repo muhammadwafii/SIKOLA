@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaksi', function (Blueprint $table) {
-            $table->id();
+            $table->id('TransaksiID');
+            $table->unsignedBigInteger('UserID');
+            $table->enum('MetodePembayaran', ['Tunai', 'Non-Tunai']);
+            $table->date('TanggalTransaksi');
+            $table->decimal('TotalHarga', 10, 2);
             $table->timestamps();
+
+            $table->foreign('UserID')->references('id')->on('users')->onDelete('cascade'); //foreign key
         });
     }
 
