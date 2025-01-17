@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-   Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
+   Route::get('/barang', [BarangController::class, 'index'])->name('Barang.index');
 });
 
 require __DIR__.'/auth.php';

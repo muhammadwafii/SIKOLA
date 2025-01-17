@@ -28,11 +28,17 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    barang
+                                    Dashboard
+                                </NavLink>
+
+                                <NavLink
+                                    href={route('barang.index')}
+                                    active={route().current('barang.index')}
+                                >
+                                    Barang
                                 </NavLink>
                             </div>
                         </div>
-                        
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
@@ -134,6 +140,12 @@ export default function AuthenticatedLayout({ header, children }) {
                             active={route().current('dashboard')}
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('barang.index')}
+                            active={route().current('barang.index')}
+                        >
+                            Barang
                         </ResponsiveNavLink>
                     </div>
 
