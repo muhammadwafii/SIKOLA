@@ -22,7 +22,7 @@ return new class extends Migration
             // Foreign key ke tabel transaksi
             $table->foreign('TransaksiID')->references('TransaksiID')->on('transaksi')->onDelete('cascade');
             // Foreign key ke tabel barang
-            $table->foreign('BarangID')->references('id')->on('barang')->onDelete('cascade');
+            $table->foreign('BarangID')->references('BarangID')->on('barang')->onDelete('cascade');
         });
 
     }
