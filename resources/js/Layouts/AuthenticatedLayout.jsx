@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { Home, Menu } from "lucide-react"; // Import icons (you can change these)
+import { Users } from "lucide-react";
+
 
 export default function Sidebar({ children }) {
     const user = usePage().props.auth.user;
@@ -10,6 +12,7 @@ export default function Sidebar({ children }) {
     // Sidebar Menu Items (Easily add more)
     const menuItems = [
         { name: "Dashboard", href: route("dashboard"), icon: <Home size={20} /> },
+        { name: "Users", href: route("users.index"), icon: <Users size={20} /> },
     ];
 
     return (
