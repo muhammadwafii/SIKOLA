@@ -5,47 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
-{
-    $users = User::paginate(10);
-    return Inertia::render('User/Index', [
-        'users' => $users,
-    ]);
-}
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
-        //return view('user.create');
+        $users = User::with('roles')->paginate(10);
+        return Inertia::render('User/Index', ['users' => $users]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-{
-    /*$validate = $request->validate([
-        'name' => 'required|unique:users|min:5',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:5',
-        'role' => 'required',
-    ]);
+    public function create()
+    {
+        return Inertia::render('User/Create');
+    }
 
-    try {
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:users|min:5',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:5',
+            'role' => 'required',
+        ]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -53,93 +38,41 @@ class UserController extends Controller
         ]);
 
         if ($user) {
-            $role = new Role;
-            $role->user_id = $user->id;
-            $role->role = $request->role;
-            $role->save();
+            Role::create(['user_id' => $user->id, 'role' => $request->role]);
         }
-        
-    } catch (Exception $e) {
-        return redirect()->back()->with('error', 'Data Gagal Disimpan');
+
+        return redirect()->route('user.index')->with('success', 'Data Berhasil Disimpan');
     }
 
-    return redirect()->route('user.index')->with('success', 'Data Berhasil Disimpan');*/
-}
-
-
-    
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        /*$user = User::findOrFail($id);
-        return view('user.edit', compact('user'));*/
+        $user = User::with('roles')->findOrFail($id);
+        return Inertia::render('User/Edit', ['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        /*$validate = $request->validate([
-            'name' => ['required', 'string', 'unique:users,name,'.$id],
-            'email' => ['required', 'string', 'unique:users,email,'.$id],
+        $request->validate([
+            'name' => 'required|string|unique:users,name,'.$id,
+            'email' => 'required|string|unique:users,email,'.$id,
             'role' => 'required',
         ]);
-        
-        try {
-            $user = User::find($id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-        
-            if ($request->filled('password')) {
-                $user->password = Hash::make($request->password);
-            }
-            $user->save();
-        
-            if ($user) {
-                $cek = Role::where('user_id', $id)->first();
-                if ($cek) {
-                    $role = Role::where('user_id', $id)->first();
-                } else {
-                    $role = new Role;
-                    $role->user_id = $user->id;
-                }
-                $role->role = $request->role;
-                $role->save();
-            }
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Data Gagal Disimpan');
-        }
-        
-        return redirect('user')->with('success', 'Data Berhasil Disimpan');*/
-        
-        
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+        ]);
+
+        $role = Role::updateOrCreate(['user_id' => $id], ['role' => $request->role]);
+
+        return redirect()->route('user.index')->with('success', 'Data Berhasil Diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
-{
-    /*try {
-        $user = User::findOrFail($id);
-        $user->delete();
-
+    {
+        User::findOrFail($id)->delete();
         return redirect()->route('user.index')->with('success', 'Data Berhasil Dihapus');
-    } catch (Exception $e) {
-        return redirect()->back()->with('error', 'Data Gagal Dihapus');
-    }*/
-}
-
+    }
 }
